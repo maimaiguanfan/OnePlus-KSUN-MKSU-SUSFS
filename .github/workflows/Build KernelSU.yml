@@ -19,13 +19,19 @@ on:
         type: choice
         options:
           - 'oneplus12_v'
+          - 'oneplus12_u'
           - 'oneplus_ace3_pro_v'
           - 'oneplus_ace5'
           - 'oneplus_pad2_v'
           - 'oneplus_11_v'
+          - 'oneplus_11_u'
+          - 'oneplus_11_t'
+          - 'oneplus_12r_v'
           - 'oneplus_ace2pro_v'
           - 'oneplus_ace3_v'
           - 'oneplus_open_v'
+          - 'oneplus_10t_v'
+          - 'oneplus_11r_v'
           - 'oneplus_ace2_v'
           - 'oneplus_ace_pro_v'
           - 'oneplus_10_pro_v'
@@ -160,9 +166,11 @@ jobs:
         run: |
           git clone https://github.com/Xiaomichael/AnyKernel3 --depth=1
           rm -rf ./AnyKernel3/.git
-          dir1="./kernel_workspace/kernel_platform/out/msm-kernel-${{ github.event.inputs.CPUD }}-gki/dist/"
-          dir2="./kernel_workspace/kernel_platform/common/out/arch/arm64/boot/"
-          dir3="./kernel_workspace/kernel_platform/out/msm-${{ github.event.inputs.CPUD }}-${{ github.event.inputs.CPUD }}-gki/dist/"
+          dir1="kernel_workspace/kernel_platform/out/msm-kernel-${{ github.event.inputs.CPUD }}-gki/dist/"
+          dir2="kernel_workspace/kernel_platform/bazel-out/k8-fastbuild/bin/msm-kernel/${{ github.event.inputs.CPUD }}_gki_kbuild_mixed_tree/"
+          dir3="kernel_workspace/kernel_platform/out/msm-${{ github.event.inputs.CPUD }}-${{ github.event.inputs.CPUD }}-gki/dist/"
+          dir4="kernel_workspace/kernel_platform/out/msm-kernel-${{ github.event.inputs.CPUD }}-gki/gki_kernel/common/arch/arm64/boot/"
+          dir5="kernel_workspace/kernel_platform/out/msm-${{ github.event.inputs.CPUD }}-${{ github.event.inputs.CPUD }}-gki/gki_kernel/common/arch/arm64/boot/"
           target1="./AnyKernel3/"
           target2="./kernel_workspace/kernel"
 
@@ -172,6 +180,10 @@ jobs:
             image_path="$dir2"Image
           elif find "$dir3" -name "Image" | grep -q "Image"; then
             image_path="$dir3"Image
+          elif find "$dir4" -name "Image" | grep -q "Image"; then
+            image_path="$dir4"Image
+          elif find "$dir5" -name "Image" | grep -q "Image"; then
+            image_path="$dir5"Image
           else
             image_path=$(find "./kernel_workspace/kernel_platform/common/out/" -name "Image" | head -n 1)
           fi
@@ -183,6 +195,7 @@ jobs:
             else
               echo "源文件与目标相同，跳过复制"
             fi
+            cp "$dir1"Image ./AnyKernel3/Image
           else
             echo "未找到 Image 文件，构建可能失败"
             exit 1
