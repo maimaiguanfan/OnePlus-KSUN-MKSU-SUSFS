@@ -37,7 +37,7 @@ on:
           - 'oneplus_10_pro_v'
           - 'oneplus_ace_3v_v'
           - ' '
-        default: 'oneplus12_v'
+        default: 'oneplus_ace3_pro_v'
       CPUD:
         description: "处理器代号"
         required: true
@@ -183,9 +183,6 @@ jobs:
       - name: Build kernel
         run: |
           cd kernel_workspace
-          sed -i '$s|echo "\$res"|echo "$res-xiaoxiaow"|' kernel_platform/common/scripts/setlocalversion            
-          sed -i '$s|echo "\$res"|echo "$res-xiaoxiaow"|' kernel_platform/msm-kernel/scripts/setlocalversion
-          sed -i '$s|echo "\$res"|echo "$res-xiaoxiaow"|' kernel_platform/external/dtc/scripts/setlocalversion
           if [ "${{ github.event.inputs.KERNEL_VERSION }}" == "6.1" ]; then
             ./kernel_platform/build_with_bazel.py -t ${{ github.event.inputs.CPUD }} gki
           else
